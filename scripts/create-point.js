@@ -16,9 +16,10 @@ populateUFs()
 // habilitando o campo Cidade
 
 function getCities(event) {
+    // mudanda o valor de city na url
     const citySelect = document.querySelector("[name=city]")
-    const stateInput = document.querySelector("[name=city]") // mudanda o valor de city na url
-    
+    const stateInput = document.querySelector("[name=state]")
+
     // informa o número do selecteedIndex
     const indexOfSelectedState = event.target.selectedIndex
 
@@ -26,16 +27,21 @@ function getCities(event) {
     stateInput.value = event.target.options[indexOfSelectedState].text
 
     const ufValue = event.target.value
-    
+
     // interpolando a constante ufValue na url; url dinâmica
     const url = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufValue}/municipios`
 
+    // limpando contéudo do campo Cidade
+    citySelect.innerHTML = "<option value>Selecione a Cidade</option>"
+    // campo Cidade bloqueado ao limpar
+    citySelect.disabled = true
+
     fetch(url)
-        .then(res => res.json()) 
+        .then(res => res.json())
         .then(cities => {
 
             for (const city of cities) {
-                citySelect.innerHTML += `<option value="${city.id}">${city.nome}</option>`
+                citySelect.innerHTML += `<option value="${city.nome}">${city.nome}</option>`
             }
 
             // ativando o campo Cidade ao selecionar o Estado
